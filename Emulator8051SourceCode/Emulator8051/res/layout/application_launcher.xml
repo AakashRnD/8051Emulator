@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    
+    <TabHost
+    android:id="@android:id/tabhost"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TabWidget
+            android:id="@android:id/tabs"
+            android:layout_width="600px"
+            android:layout_height="30px"
+            android:layout_marginLeft="200dp"
+            android:layout_marginRight="0dp" />
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            >
+
+    
+
+        </FrameLayout>
+    </LinearLayout>
+</TabHost>
+
+    <SlidingDrawer
+        android:id="@+id/slidingDrawer1"
+        android:layout_width="65dp"
+        android:layout_height="match_parent"
+       android:layout_marginTop="35dp"
+        android:content="@+id/content"
+        android:handle="@+id/handle"
+        android:orientation="horizontal"
+        android:rotation="180" >
+
+        <Button
+            android:id="@+id/handle"
+            android:layout_width="25dp"
+            android:layout_height="200dp"
+            android:layout_marginRight="0dp"
+            android:background="@drawable/arrow"
+           android:rotation="180" />
+
+        <LinearLayout
+            android:id="@+id/content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#000000"
+            android:orientation="vertical" >
+
+            <Button
+                android:id="@+id/button1"
+                android:layout_width="30dp"
+                android:layout_height="25dp"
+                android:layout_marginTop="150dp"
+                android:rotation="180"
+                android:layout_marginLeft="6dp"
+                android:background="@drawable/save"
+                android:onClick="saveClick" />
+
+            <Button
+                android:id="@+id/button2"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:rotation="180"
+                android:layout_marginLeft="2dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/open"
+                android:onClick="openClick"/>
+
+            <Button
+                android:id="@+id/button3"
+                android:layout_width="33dp"
+               	android:layout_height="33dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginLeft="6dp"
+                android:rotation="180"
+                android:background="@drawable/foldernew"
+                android:onClick="newClick" />
+
+        </LinearLayout>
+    </SlidingDrawer>
+
+<ImageView
+    android:id="@+id/imageView1"
+    android:layout_width="wrap_content"
+    android:layout_height="30px"
+    android:layout_alignParentLeft="true"
+    android:layout_alignParentTop="true"
+    android:src="@drawable/logo_8051new"
+     />
+    
+
+<TextView
+    android:id="@+id/textView1"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignParentTop="true"
+    android:layout_marginLeft="3dp"
+    android:layout_toRightOf="@+id/imageView1"
+    android:text="EMULATOR8051"
+    android:textSize="15sp" />
+
+</RelativeLayout>
+    
+

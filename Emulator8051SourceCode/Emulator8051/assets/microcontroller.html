@@ -1,0 +1,2447 @@
+<html>
+	<head>
+		<title> Help Manual for 8051</title>
+	</head>
+	<body>
+	
+		<div id="main" align="justify">
+		<h1 style="text-align:center">Microcontroller 8051</h1>
+
+				<a href="#pinout"><b>A. Pin out Description</b></a></br>
+				<a href="#abcpu_registers"><b>B. A and B CPU Registers</b></a></br>
+				<a href="#pc_dptr"><b>C. Program Counter and Data Pointer</b></a></br>
+				<a href="#flag_psw"><b>D. Flags and the Program Status Word (PSW)</b></a></br>
+				<a href="#sfrs"><b>E.Special Function Registers</b></a></br>
+				<a href="#sp"><b>F. The Stack and the Stack Pointer</b></a></br>
+				<a href="#internal_ram"><b>G. Internal RAM</b></a></br>
+				<a href="#osc_clock"><b>H. The 8051 Oscillator and Clock</b></a></br>
+				<a href="#assembly_instructions"><b>I. 8051 Assembly Instructions</b></a></br>
+				<a href="#list_instructions"><b>J. Assembly instructions list</b></a></br>
+				<a href="#8051_interfacing"><b>K. 8051 Interfacing</b></a>
+				<ol>
+					<li><a href="#led_interfacing"><b> Led Bar interfacing</b></a></li>
+					<li><a href="#seven_segment"><b> Seven segment display interfacing</b></a></li>
+					<li><a href="#dac"><b> Digital to Analog Converter (DAC) interfacing</b></a></li>
+					<li><a href="#stepper_motor"><b> Stepper Motor interfacing</b></a></li>
+				</ol>
+				<a href="#reference"> <b>L. Reference</b></a>
+					
+		</div>
+
+		<div id="pinout" align="justify">
+			<h3 style="text-align:center"><b>A.Pin out Description:</b></h3>
+			
+			<p>8051 microcontrollers have 4 I/O ports each comprising 8 pins which can be configured as inputs or outputs.</p>
+			 <div align="center"><img src="pin_diagram.png"/></div>  
+			<p><b>Pins 1 to 8(Port 1)</b>: The Pins 1.0 to 1.7 are 8 Pins of port 1. Each of them can be configured as input or output pin.<br />
+			<b><br />
+			Pin 9</b>: It is used to Reset Microcontroller 8051. A positive pulse is given on this Pin to reset Microcontroller.<br />
+			<br />
+			<b>Pin 10 to 17(Port 3)</b>: These Pins are similar to Pins of Port 1. These Pins can be used as universal Input or output. These are dual function Pins. Function of each Pin is given as:</p>
+
+			<p><b>Pin 10</b>: It is Serial synchronous Communication Input or Serial Asynchronous Communication input.</p>
+
+			<p><b>Pin 11: </b>Serial Asynchronous Communication Output or Serial Synchronous Communication Output.</p>
+
+			<p><b>Pin 12</b>: Interrupt 0 input.</p>
+
+			<p><b>Pin 13: </b>Interrupt 1 input.</p>
+
+			<p><b>Pin 14</b>: Counter 0 clock input.</p>
+
+			<p><b>Pin 15: </b>Counter 1 clock input.</p>
+
+			<p><b>Pin 16</b>: Writing Signal for Writing content on external RAM.</p>
+
+			<p><b>Pin 17</b>: Reading Signal to read contents of external RAM.</p>
+
+			<p><b>Pin 18 and 19</b>: These are input output PINS for oscillator. An internal oscillator is connected to Micro controller through these PINS.</p>
+
+			<p><b>Pin 20</b>: Pin 20 is grounded.</p>
+
+			<p><b>Pin 21 to 28 (Port 2)</b>:These Pins can be configured as Input Output Pins. But this is only possible in case when we don't use any external memory. If we use external memory then these pins will work as high order address bus(A8 to A15).</p>
+
+			<p><b>Pin 29</b>: If we uses an external ROM then it should has a logic 0 which indicates Micro controller to read data from memory.</p>
+
+			<p><b>Pin 30</b>: This Pin is used for ALE that is Address Latch Enable. If we uses multiple memory chips then this pin is used to distinguish between them. This Pin also gives program pulse input during programming of EPROM.</p>
+
+			<p><b>Pin 31</b>: If we have to use multiple memories then by applying logic 1 to this pin instructs Micro controller to read data from both memories first internal and afterwards external.</p>
+
+			<p><b>Pin 32 to 39(Port 0)</b>: Similar to port 2 and 3, these pins can be used as input output pins when we don't use any external memory. When ALE or Pin 30 is at 1 then this port is used as data bus, when ALE pin at 0, then this port is used as lower order address bus(A0 to A7).</p>
+		</div>
+
+		<div id="abcpu_registers">
+			<h3 style="text-align:center">B. A and B CPU Registers:</h3>
+
+			<p>Registers A and B, comprise the mathematical core of the 8051 central processing unit(CPU).</p>
+
+			<p>The A (accumulator) register is the most versatile of the two CPU registers and is used for many operations, including addition, subtraction, integer multiplication and division and Boolean bit manipulations. The register B is also used with the A register for multiplication and division operations.</p>
+		</div>
+
+		<div id="pc_dptr">
+			<h3 style="text-align:center">C. Program Counter and Data Pointer </h3>
+
+			<p>The 8051 contains two 16-bit registers: the program counter (PC) and the data pointer (DPTR). Each is used to hold the address of a byte in memory. </p>
+
+			<p>Program instruction bytes are fetched from locations in memory that are addressed by the PC. Program ROM may be on the chip at addresses 0000h to 0FFFh, external to the chip for addresses that exceed 0FFFh, or totally external for all addresses from 0000h to FFFFh. The PC is automatically incremented after every instruction byte is fetched and may also be altered by certain instructions. The PC is the only register that does not have an internal address. </p>
+
+			<p>The DPTR register is made up of two 8-bit registers named DPH and DPL, that are used to furnish memory addresses for internal and external code access and external data access. The DPTR is under the control of program instructions and can be specified by its 16-bit name, DPTR, or by each individual byte name, DPH and DPL. DPTR does not have a single internal address; DPH and DPL are each assigned an address.</p>
+		</div>
+
+		<div id="flag_psw">
+			<h3 style="text-align:center">D. Flags and the Program Status Word (PSW) </h3>
+
+			<p>Flags are 1-bit registers provided to store the results of certain program instructions. Other instructions can test the condition of the flags and make decisions based upon the flag states. In order that the flags may be conveniently addressed, they are grouped inside the program status word (PSW) and the power control (PCON) registers. </p>
+			<div align="center"><img src="psw.png"/></div>
+		</div>
+
+		<div id="sfrs">
+			<h3 style= "text-align:center">E. Special Function Registers</h3>
+
+			<p>The 8051 operations that do not use the internal 128-byte RAM addresses from 00h to 7Fh are done by a group of specific internal registers, each called a special-function register (SFR), which may be addressed much like internal RAM using addresses from 80h to FFh .</p>
+
+			<p>Some SFRs are also bit addressable, as is the case for the bit area of RAM. This feature allows the programmer to change only what needs to be altered, leaving the remaining bits in that SFR unchanged.</p>
+
+			<p>The SFR names and equivalent internal RAM addresses are given in the following list:</p>
+			
+			<div align="center">
+			<table border="1" cellspacing="0" cellpadding="0" > 
+				<tbody>
+					<tr>
+					<td valign="top" ><p>NAME</p></td>
+					<td valign="top" ><p>FUNCTION</p></td>
+					<td valign="top" ><p>INTERNAL RAM ADDRESS (HEX)</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>A</p></td>
+					<td valign="top" ><p>Accumulator</p></td>
+					<td valign="top" ><p>OEO</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>B</p></td>
+					<td valign="top" ><p>Arithmetic</p></td>
+					<td valign="top" ><p>0F0</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>DPH</p></td>
+					<td valign="top" ><p>Addressing external memory</p></td>
+					<td valign="top" ><p>83</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>DPL</p></td>
+					<td valign="top" ><p>Addressing external memory</p></td>
+					<td valign="top" ><p>82</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>IE</p></td>
+					<td valign="top" ><p>Interrupt enable control</p></td>
+					<td valign="top" ><p>0A8</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>IP</p></td>
+					<td valign="top" ><p>Interrupt priority</p></td>
+					<td valign="top" ><p>0B8</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>PO</p></td>
+					<td valign="top" ><p>Input/output port latch</p></td>
+					<td valign="top" ><p>80</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>Pl</p></td>
+					<td valign="top" ><p>Input/output port latch</p></td>
+					<td valign="top" ><p>90</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>P2</p></td>
+					<td valign="top" ><p>Input/output port latch</p></td>
+					<td valign="top" ><p>A0</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>P3</p></td>
+					<td valign="top" ><p>Input/output port latch</p></td>
+					<td valign="top" ><p>0B0</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>PC ON</p></td>
+					<td valign="top" ><p>Power control</p></td>
+					<td valign="top" ><p>87</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>PSW</p></td>
+					<td valign="top" ><p>Program status word</p></td>
+					<td valign="top" ><p>0D0</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>SCON</p></td>
+					<td valign="top" ><p>Serial port control</p></td>
+					<td valign="top" ><p>98</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>SBUF</p></td>
+					<td valign="top" ><p>Serial port data buffer</p></td>
+					<td valign="top" ><p>99</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>SP</p></td>
+					<td valign="top" ><p>Stack pointer</p></td>
+					<td valign="top" ><p>81</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>TMOD</p></td>
+					<td valign="top" ><p>Timer / counter mode control</p></td>
+					<td valign="top" ><p>89</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>TCON</p></td>
+					<td valign="top" ><p>Timer / counter control</p></td>
+					<td valign="top" ><p>88</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>TLO</p></td>
+					<td valign="top" ><p>Timer 0 low byte</p></td>
+					<td valign="top" ><p>8A</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>THO</p></td>
+					<td valign="top" ><p>Timer 0 low byte</p></td>
+					<td valign="top" ><p>8C</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>TL1</p></td>
+					<td valign="top" ><p>Timer 0 low byte</p></td>
+					<td valign="top" ><p>8B</p></td>
+					</tr>
+
+					<tr>
+					<td valign="top" ><p>TH1</p></td>
+					<td valign="top" ><p>Timer 1 high byte</p></td>
+					<td valign="top" ><p>8D</p></td>
+					</tr>
+
+				</tbody>
+			</table>
+			</div>
+		</div>
+
+		<div id="sp">
+			<h3 style= "text-align:center">F. The Stack and the Stack Pointer</h3>
+
+			<p>The stack refers to an area of internal RAM that is used in conjunction with certain opcode to store and retrieve data quickly. The 8-bit stack pointer (SP) register is used by the 8051 to hold an internal RAM address that is called the "top of the stack." The address held in the SP register is the location in internal RAM where the last byte of data was stored by a stack operation.</p>
+
+			<p>The data storing and retrieving from stack and corresponding contents of stack pointer are shown in fig. </p>
+			<div align="center"><img src="stack_pointer.png"/></div>
+		</div>
+
+		<div id="internal_ram">
+			<h3 style= "text-align:center">G. Internal RAM</h3>
+			<div align="center"><img src="ram_org.png"/></div>
+
+			<p>The 128-byte internal RAM, which is generally organized into three distinct areas:</p>
+
+			<p>1. Thirty-two bytes from address 00h to 1Fh that make up 32 working registers or­ganized as four banks of eight registers each. The four register banks are num­bered 0 to 3 and are made up of eight registers named R0 to R 7.</p>
+
+			<p>2. A bit-addressable area of 16 bytes occupies RAM byte addresses 20h to 2Fh, forming a total of 128 addressable bits. </p>
+
+			<p>3. A general-purpose RAM area above the bit area, from 30h to 7Fh, addressable as bytes.</p>
+		</div>
+
+		<div id="osc_clock">
+			<h3 style="test-align:center">H. The 8051 Oscillator and Clock </h3>
+
+			<p>The heart of the 8051 is the circuitry that generates the clock pulses by which all internal operations are synchronized. Pins XTALI and XTAL2 are provided for connecting a resonant network to form an oscillator. Typically, a quartz crystal and capacitors are employed, as shown in Figure. The crystal frequency is the basic internal clock frequency of the microcontroller</p>
+			<div align="center"><img src="crystal_osc.png"/></div>
+
+		</div>
+		<div id="assembly_instructions">
+			<h3 style= "text-align:center">I. 8051 Assembly Instructions</h3>
+
+			<h4>1. ACALL:</h4>
+
+			<p>The ACALL instruction calls a subroutine located at the specified address. The PC is incremented twice to obtain the address of the following instruction. The 16-bit PC is then stored on the stack (low-order byte first) and the stack pointer is incremented twice. No flags are affected.</p>
+
+			<h5>ACALL addr11</h5>
+
+			<h4>2. ADD:</h4>
+
+			<p>The ADD instruction adds a byte value to the accumulator and stores the results back in the accumulator. Several of the flag registers are affected.</p>
+
+			<h5>ADD A, #immediate</h5>
+
+			<h4>3. ADDC:</h4>
+
+			<p>The ADDC instruction adds a byte value and the value of the carry flag to the accumulator. The results of the addition are stored back in the accumulator. Several of the flag registers are affected.</p>
+
+			<h5>ADDC A, #immediate</h5>
+
+			<h4>4. AJMP:</h4>
+
+			<p>The AJMP instruction transfers program execution to the specified address. The address is formed by combining the 5 high-order bits of the address of the following instruction (for A15-A11), the 3 high-order bits of the opcode (for A10-A8), and the second byte of the instruction (for A7-A0). The destination address must be located in the same 2KByte block of program memory as the opcode following the AJMP instruction. No flags are affected</p>
+
+			<h5>AJMP addr11</h5>
+
+			<h4>5. ANL:</h4>
+
+			<p>The ANL instruction performs a bitwise logical AND operation between the specified byte or bit operands and stores the result in the destination operand.</p>
+
+			<h5>ANL A, #immediate</h5>
+
+			<h4>6. CJNE:</h4>
+
+			<p>The CJNE instruction compares the first two operands and branches to the specified destination if their values are not equal. If the values are the same, execution continues with the next instruction.</p>
+
+			<h5>CJNE @Rn, #immediate, offset</h5>
+
+			<h4>7. CLR:</h4>
+
+			<p>The CLR instruction sets the specified destination operand to a value of 0.</p>
+
+			<h5>CLR A</h5>
+
+			<h4>8. CPL:</h4>
+
+			<p>The CPL instruction logically complements the value of the specified destination operand and stores the result back in the destination operand. Bits that previously contained a 1 will be changed to a 0 and bits that previously contained a 0 will be changed to a 1.</p>
+
+			<h5>CPL A</h5>
+
+			<h4>9. DA:</h4>
+
+			<p>The DA instruction adjusts the eight-bit value in the Accumulator resulting from the earlier addition of two variables (each in packed-BCD format), producing two four-bit digits. Any ADD or ADDC instruction may have been used to perform the addition.</p>
+
+			<h5>DA A</h5>
+
+			<h4>10. DEC:</h4>
+
+			<p>The DEC instruction decrements the specified operand by 1.An original value of 00h underflows to 0FFh. No flags are affected by this instruction.</p>
+
+			<h5>DEC @Ri</h5>
+
+			<h4>11. DIV:</h4>
+
+			<p> The DIV instruction divides the unsigned 8-bit integer in the accumulator by the unsigned 8-bit integer in register B. After the division, the quotient is stored in the accumulator and the remainder is stored in the B register. The carry and OV flags are cleared.</p>
+
+			<h5>DIV AB</h5>
+
+			<h4>12. DJNZ:</h4>
+
+			<p>The DJNZ instruction decrements the byte indicated by the first operand and, if the resulting value is not zero, branches to the address specified in the second operand.</p>
+
+			<h5>DJNZ direct, offset</h5>
+
+			<h4>13. INC:</h4>
+
+			<p>The INC instruction increments the specified operand by 1. An original value of 0FFh or 0FFFFh overflows to 00h or 0000h. No flags are affected by this instruction.</p>
+
+			<h5>INC @Ri</h5>
+
+			<h4>14. JB:</h4>
+
+			<p>The JB instruction branches to the address specified in the second operand if the value of the bit specified in the first operand is 1. The bit that is tested is not modified. No flags are affected by this instruction.</p>
+
+			<h5>JB bit, offset</h5>
+
+			<h4>15. JBC:</h4>
+
+			<p>The JBC instruction branches to the address specified in the second operand if the value of the bit specified in the first operand is 1.Otherwise, execution continues with the next instruction.<br />
+			If the bit specified in the first operand is set, it is cleared. No flags are affected by this instruction.</p>
+
+			<h5>JBC bit, offset</h5>
+
+			<h5>16. JC:</h5>
+
+			<p>The JC instruction branches to the specified address if the carry flag is set. Otherwise, execution continues with the next instruction. No flags are affected by this instruction.</p>
+
+			<h5>JC offset</h5>
+
+			<h4>17. JMP:</h4>
+
+			<p>The JMP instruction transfers execution to the address generated by adding the 8-bit value in the accumulator to the 16-bit value in the DPTR register. Neither the accumulator nor the DPTR register are altered. No flags are affected by this instruction.</p>
+
+			<h5>JMP @A, DPTR</h5>
+
+			<h4>18. JNB:</h4>
+
+			<p>The JNB instruction branches to the specified address if the specified bit operand has a value of 0. Otherwise, execution continues with the next instruction. No flags are affected by this instruction.</p>
+
+			<h5>JNB bit, offset</h5>
+
+			<h4>19. JNC:</h4>
+
+			<p>The JNC instruction transfers program control to the specified address if the carry flag is 0. Otherwise, execution continues with the next instruction. No flags are affected by this instruction.</p>
+
+			<h5>JNC offset</h5>
+
+			<h4>20. JNZ:</h4>
+
+			<p> The JNZ instruction transfers control to the specified address if the value in the accumulator is not 0. If the accumulator has a value of 0, the next instruction is executed. Neither the accumulator nor any flags are modified by this instruction.</p>
+
+			<h5>JNZ offset</h5>
+
+			<h4>21. JZ:</h4>
+
+			<p>The JZ instruction transfers control to the specified address if the value in the accumulator is 0. Otherwise, the next instruction is executed. Neither the accumulator nor any flags are modified by this instruction.</p>
+
+			<h5>JZ offset</h5>
+
+			<h4>22. LCALL:</h4>
+
+			<p>The LCALL instruction calls a subroutine located at the specified address. This instruction first adds 3 to the PC to generate the address of the next instruction. This result is pushed onto the stack low-byte first and the stack pointer is incremented by 2. The high-order and low-order bytes of the PC are loaded from the second and third bytes of the instruction respectively. Program execution is transferred to the subroutine at this address. No flags are affected by this instruction.</p>
+
+			<h5>LCALL addr16</h5>
+
+			<h4>23. LJMP:</h4>
+
+			<p>The LJMP instruction transfers program execution to the specified 16-bit address. The PC is loaded with the high-order and low-order bytes of the address from the second and third bytes of this instruction respectively. No flags are affected by this instruction.</p>
+
+			<h5>LJMP addr16</h5>
+
+			<h4>24. MOV:</h4>
+
+			<p>The MOV instruction moves data bytes between the two specified operands. The byte specified by the second operand is copied to the location specified by the first operand. The source data byte is not affected.</p>
+
+			<h5>MOV @Rn, #immediate</h5>
+
+			<h4>25. MOVC:</h4>
+
+			<p>The MOVC instruction moves a byte from the code or program memory to the accumulator</p>
+
+			<h5>MOVC A, @A+DPTR</h5>
+
+			<h4>26. MOVX:</h4>
+
+			<p>The MOVX instruction transfers data between the accumulator and external data memory. External memory may be addressed via 16-bits in the DPTR register or via 8-bits in the R0 or R1 registers. When using 8-bit addressing, Port 2 must contain the high-order byte of the address.</p>
+
+			<h5>MOVX @Ri, A</h5>
+
+			<h4>27. MUL:</h4>
+
+			<p>The MUL instruction multiplies the unsigned 8-bit integer in the accumulator and the unsigned 8-bit integer in the B register producing a 16-bit product. The low-order byte of the product is returned in the accumulator. The high-order byte of the product is returned in the B register. The OV flag is set if the product is greater than 255 (0FFh), otherwise it is cleared. The carry flag is always cleared.</p>
+
+			<h5>MUL AB</h5>
+
+			<h4>28. NOP:</h4>
+
+			<p>The NOP instruction does nothing. Execution continues with the next instruction. No registers or flags are affected by this instruction. NOP is typically used to generate a delay in execution or to reserve space in code memory.</p>
+
+			<h5>NOP</h5>
+
+			<h4>29. ORL:</h4>
+
+			<p>The ORL instruction performs a bitwise logical OR operation on the specified operands, the result of which is stored in the destination operand.</p>
+
+			<h5>ORL A, #immediate</h5>
+
+			<h4>30. POP:</h4>
+
+			<p>The POP instruction reads a byte from the address indirectly referenced by the SP register. The value read is stored at the specified address and the stack pointer is decremented. No flags are affected by this instruction.</p>
+
+			<h5>POP direct</h5>
+
+			<h4>31. PUSH:</h4>
+
+			<p>The PUSH instruction increments the stack pointer and stores the value of the specified byte operand at the internal RAM address indirectly referenced by the stack pointer. No flags are affected by this instruction.</p>
+
+			<h5>PUSH direct</h5>
+
+			<h4>32. RET:</h4>
+
+			<p>The RET instruction pops the high-order and low-order bytes of the PC from the stack (and decrements the stack pointer by 2). Program execution resumes from the resulting address which is typically the instruction following an ACALL or LCALL instruction. No flags are affected by this instruction.</p>
+
+			<h5>RET</h5>
+
+			<h4>33. RETI:</h4>
+
+			<p>The RETI instruction is used to end an interrupt service routine. This instruction pops the high-order and low-order bytes of the PC (and decrements the stack pointer by 2) and restores the interrupt logic to accept additional interrupts. No other registers are affected by this instruction.</p>
+
+			<h5>RETI</h5>
+
+			<h4>34. RL:</h4>
+
+			<p>The RL instruction rotates the eight bits in the accumulator left one bit position. Bit 7 of the accumulator is rotated into bit 0, bit 0 into bit 1, bit 1 into bit 2, and so on. No flags are affected by this instruction.</p>
+
+			<h5>RL A</h5>
+
+			<h4>35. RLC:</h4>
+
+			<p>The RLC instruction rotates the eight bits in the accumulator and the one bit in the carry flag left one bit position. Bit 7 of the accumulator is rotated into the carry flag while the original value of the carry flag is rotated into bit 0 of the accumulator. Bit 0 of the accumulator is rotated into bit 1, bit 1 into bit 2, and so on. No other flags are affected by this operation.</p>
+
+			<h5>RLC A</h5>
+
+			<h4>36. RR:</h4>
+
+			<p>The RR instruction rotates the eight bits in the accumulator right one bit position. Bit 0 of the accumulator is rotated into bit 7, bit 7 into bit 6, and so on. No flags are affected by this instruction.</p>
+
+			<h5>RR A</h5>
+
+			<h4>37. RRC:</h4>
+
+			<p>The RRC instruction rotates the eight bits in the accumulator and the one bit in the carry flag right one bit position. Bit 0 of the accumulator is rotated into the carry flag while the original value of the carry flag is rotated in to bit 7 of the accumulator. Bit 7 of the accumulator is rotated into bit 6, bit 6 into bit 5, and so on. No other flags are affected by this instruction.</p>
+
+			<h5>RRC A</h5>
+
+			<h4>38. SETB:</h4>
+
+			<p>The SETB instruction sets the bit operand to a value of 1. This instruction can operate on the carry flag or any other directly addressable bit. No flags are affected by this instruction.</p>
+
+			<h5>SETB bit</h5>
+
+			<h4>39. SJMP:</h4>
+
+			<p>The SJMP instruction transfers execution to the specified address. The address is calculated by adding the signed relative offset in the second byte of the instruction to the address of the following instruction. The range of destination addresses is from 128 before the next instruction to 127 bytes after the next instruction.</p>
+
+			<h5>SJMP offset</h5>
+
+			<h4>40. SUBB:</h4>
+
+			<p>The SUBB instruction subtracts the specified byte variable and the carry flag from the accumulator. The result is stored in the accumulator. This instruction sets the carry flag if a borrow is required for bit 7 of the result. If no borrow is required, the carry flag is cleared.</p>
+
+			<h5>SUBB A, #immediate</h5>
+
+			<h4>41. SWAP:</h4>
+
+			<p>The SWAP instruction exchanges the low-order and high-order nibbles within the accumulator. No flags are affected by this instruction.</p>
+
+			<h5>SWAP A</h5>
+
+			<h4>42. XCH:</h4>
+
+			<p>The XCH instruction loads the accumulator with the byte value of the specified operand while simultaneously storing the previous contents of the accumulator in the specified operand.</p>
+
+			<h5>XCH A, @Ri</h5>
+
+			<h4>43. XCHD:</h4>
+
+			<p>The XCHD instruction exchanges the low-order nibble of the accumulator with the low-order nibble of the specified internal RAM location. The internal RAM is accessed indirectly through R0 or R1. The high-order nibbles of each operand are not affected.</p>
+
+			<h5>XCHD A, @Ri</h5>
+
+			<h4>44. XRL:</h4>
+
+			<p>The XRL instruction performs a logical exclusive OR operation between the specified operands. The result is stored in the destination operand.</p>
+
+			<h5>XRL A, #immediate</h5>
+
+			<h3 style="text-align:center">Assembly Directives</h3>
+
+			<h4>1. EQU:</h4>
+
+			<p>It is used to set some constant value in data label.</br>
+			e.g. temp EQU 50H</p>
+
+			<h4>2. ORG:</h4>
+
+			<p>To set the origin address of the program.</br>
+			e.g. ORG 0010H</p>
+
+			<h4>3.END:</h4>
+			<p>This indicates to assembler that the code is end here.</p>
+
+			<h4>4. DB:</h4>
+
+
+			<p>The DB statement initializes memory with one or more byte values. label is a symbol that is assigned the current memory address. expression is a byte value that is stored in memory. Each expression may be a symbol, a string, or an expression.</br>
+
+			[label:] DB expression [, expression ...]</p>
+		</div>
+
+<div id="list_instructions">
+		<h3 style= "text-align:center" >J. Assembly instructions list</h3>
+
+			<table border="0" cellpadding="0" width="80%" align="center" > 
+				<tbody>
+				<tr>
+				<td width="50%" valign="top" > 
+				<table border="1" cellspacing="0" cellpadding="0"> 
+				<tbody>
+
+				<tr>
+				<td width="15%" ><p><b>Hex Code</b></p></td>
+				<td width="19%" ><p><b>Bytes</b></p></td>
+				<td width="22%" ><p><b>Mnemonic</b></p></td>
+				<td width="42%" ><p><b>Operands</b></p></td>
+				</tr>
+
+
+
+				<tr>
+				<td width="15%"><p>00</p></td>
+				<td width="19%"><p>1</p></td>
+				<td width="22%"><p>NOP</p></td>
+				<td width="42%" nowrap="" > </td>
+				</tr>
+
+				<tr>
+				<td><p>01</p></td>
+				<td><p>2</p></td>
+				<td><p>AJMP</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>02</p></td>
+				<td><p>3</p></td>
+				<td><p>LJMP</p></td>
+				<td nowrap="" ><p>addr16</p></td>
+				</tr>
+
+				<tr>
+				<td><p>03</p></td>
+				<td><p>1</p></td>
+				<td><p>RR</p></td>
+				<td nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>04</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>05</p></td>
+				<td><p>2</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>06</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>@R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>07</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>@R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>08</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>09</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>0A</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>0B</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>0C</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>0D</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>0E</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>0F</p></td>
+				<td><p>1</p></td>
+				<td><p>INC</p></td>
+				<td nowrap="" ><p>R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>10</p></td>
+				<td><p>3</p></td>
+				<td><p>JBC</p></td>
+				<td nowrap="" ><p>bit, offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>11</p></td>
+				<td><p>2</p></td>
+				<td><p>ACALL</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>12</p></td>
+				<td><p>3</p></td>
+				<td><p>LCALL</p></td>
+				<td nowrap="" ><p>addr16</p></td>
+				</tr>
+
+				<tr>
+				<td><p>13</p></td>
+				<td><p>1</p></td>
+				<td><p>RRC</p></td>
+				<td nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>14</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>15</p></td>
+				<td><p>2</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>16</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>@R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>17</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>@R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>18</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>19</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>1A</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>1B</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>1C</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>1D</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>1E</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>1F</p></td>
+				<td><p>1</p></td>
+				<td><p>DEC</p></td>
+				<td nowrap="" ><p>R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>20</p></td>
+				<td><p>3</p></td>
+				<td><p>JB</p></td>
+				<td nowrap="" ><p>bit, offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>21</p></td>
+				<td><p>2</p></td>
+				<td><p>AJMP</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>22</p></td>
+				<td><p>1</p></td>
+				<td><p>RET</p></td>
+				<td nowrap="" > </td>
+				</tr>
+
+				<tr>
+				<td><p>23</p></td>
+				<td><p>1</p></td>
+				<td><p>RL</p></td>
+				<td nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>24</p></td>
+				<td><p>2</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>25</p></td>
+				<td><p>2</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>26</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>27</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>28</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>29</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>2A</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>2B</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>2C</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>2D</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>2E</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>2F</p></td>
+				<td><p>1</p></td>
+				<td><p>ADD</p></td>
+				<td nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>30</p></td>
+				<td><p>3</p></td>
+				<td><p>JNB</p></td>
+				<td nowrap="" ><p>bit, offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>31</p></td>
+				<td><p>2</p></td>
+				<td><p>ACALL</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>32</p></td>
+				<td><p>1</p></td>
+				<td><p>RETI</p></td>
+				<td nowrap="" > </td>
+				</tr>
+
+				<tr>
+				<td><p>33</p></td>
+				<td><p>1</p></td>
+				<td><p>RLC</p></td>
+				<td nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>34</p></td>
+				<td><p>2</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>35</p></td>
+				<td><p>2</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>36</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>37</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>38</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>39</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>3A</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>3B</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>3C</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>3D</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>3E</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>3F</p></td>
+				<td><p>1</p></td>
+				<td><p>ADDC</p></td>
+				<td nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>40</p></td>
+				<td><p>2</p></td>
+				<td><p>JC</p></td>
+				<td nowrap="" ><p>offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>41</p></td>
+				<td><p>2</p></td>
+				<td><p>AJMP</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>42</p></td>
+				<td><p>2</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>direct, A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>43</p></td>
+				<td><p>3</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>direct, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>44</p></td>
+				<td><p>2</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>45</p></td>
+				<td><p>2</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>46</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>47</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>48</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>49</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>4A</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>4B</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>4C</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>4D</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>4E</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>4F</p></td>
+				<td><p>1</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>50</p></td>
+				<td><p>2</p></td>
+				<td><p>JNC</p></td>
+				<td nowrap="" ><p>offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>51</p></td>
+				<td><p>2</p></td>
+				<td><p>ACALL</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>52</p></td>
+				<td><p>2</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>direct, A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>53</p></td>
+				<td><p>3</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>direct, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>54</p></td>
+				<td><p>2</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>55</p></td>
+				<td><p>2</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>56</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>57</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>58</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>59</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>5A</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>5B</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>5C</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL	</p></td>
+				<td nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>5D</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL</p></td>
+				<td nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>5E</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL	</p></td>
+				<td nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>5F</p></td>
+				<td><p>1</p></td>
+				<td><p>ANL	</p></td>
+				<td nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>60</p></td>
+				<td><p>2</p></td>
+				<td><p>JZ</p></td>
+				<td nowrap="" ><p>offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>61</p></td>
+				<td><p>2</p></td>
+				<td><p>AJMP</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>62</p></td>
+				<td><p>2</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>direct, A</p></td>
+				</tr>
+
+				<tr>
+				<td><p>63</p></td>
+				<td><p>3</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>direct, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>64</p></td>
+				<td><p>2</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>65</p></td>
+				<td><p>2</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td><p>66</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>67</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>68</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td><p>69</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td><p>6A</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td><p>6B</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td><p>6C</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td><p>6D</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td><p>6E</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td><p>6F</p></td>
+				<td><p>1</p></td>
+				<td><p>XRL</p></td>
+				<td nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td><p>70</p></td>
+				<td><p>2</p></td>
+				<td><p>JNZ</p></td>
+				<td nowrap="" ><p>offset</p></td>
+				</tr>
+
+				<tr>
+				<td><p>71</p></td>
+				<td><p>2</p></td>
+				<td><p>ACALL</p></td>
+				<td nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td><p>72</p></td>
+				<td><p>2</p></td>
+				<td><p>ORL</p></td>
+				<td nowrap="" ><p>C, bit</p></td>
+				</tr>
+
+				<tr>
+				<td><p>73</p></td>
+				<td><p>1</p></td>
+				<td><p>JMP</p></td>
+				<td nowrap="" ><p>@A+DPTR</p></td>
+				</tr>
+
+				<tr>
+				<td><p>74</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>75</p></td>
+				<td><p>3</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>direct, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>76</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>@R0, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>77</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>@R1, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>78</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R0, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>79</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R1, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>7A</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R2, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>7B</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R3, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>7C</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R4, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>7D</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R5, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>7E</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R6, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td><p>7F</p></td>
+				<td><p>2</p></td>
+				<td><p>MOV</p></td>
+				<td nowrap="" ><p>R7, #immed</p></td>
+				</tr>
+
+				</tbody>
+			</table>
+
+			</td>
+
+			<td width="50%" valign="top" > <table border="1" cellspacing="0" cellpadding="0" width="100%" > 
+				<tbody>
+				<tr>
+				<td width="15%" ><p><b>Hex Code</b></p></td>
+				<td width="19%"colspan="2" ><p><b>Bytes</b></p></td>
+				<td width="22%" ><p><b>Mnemonic</b></p></td>
+				<td width="42%" ><p><b>Operands</b></p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>80</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>SJMP</p></td>
+				<td width="42%" nowrap="" ><p>Offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>81</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>AJMP</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>82</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ANL</p></td>
+				<td width="42%" nowrap="" ><p>C, bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>83</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVC</p></td>
+				<td width="42%" nowrap="" ><p>A, @A+PC</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>84</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>DIV</p></td>
+				<td width="42%" nowrap="" ><p>AB</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>85</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>86</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>87</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>88</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>89</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>8A</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R2</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>8B</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R3</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>8C</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R4</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>8D</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R5</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>8E</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R6</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>8F</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, R7</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>90</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>DPTR, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>91</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ACALL</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>92</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>bit, C</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>93</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVC</p></td>
+				<td width="42%" nowrap="" ><p>A, @A+DPTR</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>94</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, #immed</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>95</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>96</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>97</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>98</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>99</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>9A</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>9B</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>9C</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>9D</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>9E</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>9F</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SUBB</p></td>
+				<td width="42%" nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A0</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ORL</p></td>
+				<td width="42%" nowrap="" ><p>C, /bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A1</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>AJMP</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A2</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>C, bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A3</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>INC</p></td>
+				<td width="42%" nowrap="" ><p>DPTR</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A4</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MUL</p></td>
+				<td width="42%" nowrap="" ><p>AB</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A5</p></td>
+				<td width="19%" colspan="2" > </td>
+				<td width="22%" ><p>reserved</p></td>
+				<td width="42%" nowrap="" > </td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A6</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>@R0, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A7</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>@R1, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A8</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R0, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>A9</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R1, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>AA</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R2, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>AB</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R3, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>AC</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R4, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>AD</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R5, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>AE</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R6, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>AF</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R7, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B0</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ANL</p></td>
+				<td width="42%" nowrap="" ><p>C, /bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B1</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ACALL</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B2</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>CPL</p></td>
+				<td width="42%" nowrap="" ><p>Bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B3</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>CPL</p></td>
+				<td width="42%" nowrap="" ><p>C</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B4</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>A, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B5</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>A, direct, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B6</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>@R0, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B7</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>@R1, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B8</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R0, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>B9</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R1, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>BA</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R2, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>BB</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R3, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>BC</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R4, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>BD</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R5, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>BE</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R6, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>BF</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>CJNE</p></td>
+				<td width="42%" nowrap="" ><p>R7, #immed, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C0</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>PUSH</p></td>
+				<td width="42%" nowrap="" ><p>Direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C1</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>AJMP</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C2</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>CLR</p></td>
+				<td width="42%" nowrap="" ><p>Bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C3</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>CLR</p></td>
+				<td width="42%" nowrap="" ><p>C</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C4</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SWAP</p></td>
+				<td width="42%" nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C5</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C6</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C7</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C8</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>C9</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>CA</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>CB</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>CC</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>CD</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>CE</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>CF</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCH</p></td>
+				<td width="42%" nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D0</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>POP</p></td>
+				<td width="42%" nowrap="" ><p>Direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D1</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ACALL</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D2</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>SETB</p></td>
+				<td width="42%" nowrap="" ><p>Bit</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D3</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>SETB</p></td>
+				<td width="42%" nowrap="" ><p>C</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D4</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>DA</p></td>
+				<td width="42%" nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D5</p></td>
+				<td width="19%" colspan="2" ><p>3</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>direct,offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D6</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCHD</p></td>
+				<td width="42%" nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D7</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>XCHD</p></td>
+				<td width="42%" nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D8</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R0, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>D9</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R1, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>DA</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R2, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>DB</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R3, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>DC</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R4, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>DD</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R5, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>DE</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R6, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>DF</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>DJNZ</p></td>
+				<td width="42%" nowrap="" ><p>R7, offset</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E0</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVX</p></td>
+				<td width="42%" nowrap="" ><p>A, @DPTR</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E1</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>AJMP</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E2</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVX</p></td>
+				<td width="42%" nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E3</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVX</p></td>
+				<td width="42%" nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E4</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>CLR</p></td>
+				<td width="42%" nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E5</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, direct</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E6</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, @R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E7</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, @R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E8</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R0</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>E9</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R1</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>EA</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R2</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>EB</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R3</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>EC</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R4</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>ED</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R5</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>EE</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R6</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>EF</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>A, R7</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F0</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVX</p></td>
+				<td width="42%" nowrap="" ><p>@DPTR, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F1</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>ACALL</p></td>
+				<td width="42%" nowrap="" ><p>addr11</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F2</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVX</p></td>
+				<td width="42%" nowrap="" ><p>@R0, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F3</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOVX</p></td>
+				<td width="42%" nowrap="" ><p>@R1, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F4</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>CPL</p></td>
+				<td width="42%" nowrap="" ><p>A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F5</p></td>
+				<td width="19%" colspan="2" ><p>2</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>direct, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F6</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>@R0, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F7</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>@R1, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F8</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R0, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>F9</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R1, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>FA</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R2, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>FB</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R3, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>FC</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R4, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>FD</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R5, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>FE</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R6, A</p></td>
+				</tr>
+
+				<tr>
+				<td width="15%" ><p>FF</p></td>
+				<td width="19%" colspan="2" ><p>1</p></td>
+				<td width="22%" ><p>MOV</p></td>
+				<td width="42%" nowrap="" ><p>R7, A</p></td>
+				</tr>
+
+				</tbody>
+				</table>
+
+				</td>
+				</tr>
+
+				</tbody>
+			</table>
+		</div>
+
+<div id="8051_interfacing">
+	<h3 style="text-align:center">K.8051 INTERFACING</h3>
+	<div id="led_interfacing">
+	<p><b>1. Led Bar interfacing </b></p>
+	<div align="center"><img src="led_circuit.png"/></div>
+	<p>The principle of operation of LEDs is simple. The commonly available LEDs have a drop voltage of 1.7 V and need 10 mA to glow at full intensity. The value of resistance R can be calculated using the equation, R= (V-1.7)/10 mA. Since most of the controllers work on 5V, so substituting V= 5V, the value of resistance comes out to be 330 ohm. The resistance 220 ohm, 470 ohm is commonly used substitute in case 330 ohm is not available.</p>
+
+	<p>LEDs are connected to the port P0. LEDs need approximately 10mA current to flow through them in order to glow at maximum intensity. However the output of the controller is not sufficient enough to drive the LEDs, so if the positive leg of the LED is connected to the pin and the negative to ground as shown in the figure, the LED will not glow at full illumination.</p>
+
+	<p>As soon as we provide supply to the controller, the LEDs start blinking i.e., they become on for a certain time duration and then become off for the same time duration. This delay is provided by calling the delay function. The values inside the delay function have been set to provide a delay in multiples of millisecond (delay (100) will provide a delay of 100 millisecond).</p>
+	</div>
+	<div id="seven_segment">
+	<p><b>2. Seven segment display interfacing</b></p>
+
+	<p>7 segment LED display is very popular and it can display digits from 0 to 9 and quite a few characters like A, b, C, ., H, E, e, F, n, o, t, u, y, etc. A seven segment display consists of seven LEDs arranged in the form of a square<strong> '8'</strong> slightly inclined to the right and a single LED as the dot character. Different characters can be displayed by selectively glowing the required LED segments. Seven segment displays are of two types, <strong><i>common cathode and common anode.</i></strong> In common cathode type , the cathode of all LEDs are tied together to a single terminal which is usually labeled as '<strong>com</strong>' and the anode of all LEDs are left alone as individual pins labeled as a, b, c, d, e, f, g &amp; h (or dot) .</p>
+	</div>
+
+	<div id="dac">
+	<p><b>3. Digital to Analog Converter (DAC) interfacing</b></p>
+	<div align="center"><img src="dac.png"/></div>
+	<p>The digital-to-analog converter (DAC) is a device widely used to convert digital pulses to analog signals. The first criterion for judging a DAC is its resolution, which is a function of the number of binary inputs. The common ones are 8, 10, and 12 bits. The number of data bit inputs decides the resolution of the DAC since the number of analog output levels is equal to 2, where <em>n </em>is the number of data bit inputs. Therefore, an 8-input DAC such as the DAC0808 provides 256 discrete voltage (or current) levels of output.</p>
+
+	<p>The total current provided by the I<sub>out</sub> pin is a function of the binary numbers at the DO to D7 inputs of the DAC0808 and the reference current (I<sub>re</sub>f), and is as follows:</p>
+	<div align="center"><img src="current_equation.png"/></div>
+	</div>
+
+	<div id= "stepper_motor">
+	<p><b>4. Stepper Motor interfacing</b></p>
+	<div align="center"><img src="stepper_motor_mc.png"/></div>
+	<p>To cause the stepper to rotate, we have to send a pulse to each coil in turn. The 8051 does not have sufficient drive capability on its output to drive each coil, so there are a number of ways to drive a stepper, </p>
+
+	<p>Stepper motors are usually controlled by transistor or driver IC like ULN2003. <br />
+	<br />
+	Driving current for each coil is then needed about 60mA at +5V supply. A Darlington transistor array, ULN2003 is used to increase driving capacity of the 2051 chip. </p>
+
+	<p>As you can see the stepper motor is connected with Microcontroller output port pins through a ULN2003 array. So when the microcontroller is giving pulses with particular frequency to ULN2003, the motor is rotated in clockwise or anticlockwise. </p>
+	</div>
+</div>
+
+<div id="reference">
+	<h3 style="text-align:center">L.REFERENCE</h3>
+	<p> The 8051 Microcontroller - Architecture, Programming, & Applications By Kenneth J. Ayala</p>
+	<p>The 8051 microcontroller and embedded systems By Muhammad Ali mazidi, Rollin D Mckinlay & Kenneth  Gillispie Mazidi</p>
+</div>
+</body>
+</html>

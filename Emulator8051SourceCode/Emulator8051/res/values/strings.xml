@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Emulator8051</string>
+    <string name="action_settings">Settings</string>
+    <string name="title_section1">Introduction</string>
+    <string name="title_section2">About Us</string>
+    <string name="title_section3">Section 3</string>
+    
+    
+  
+    
+   <string-array name="list1">
+        <item>None</item>
+        <item>Led Circuit</item>
+        <item>7 Segment Circuit</item>
+      <item>Stepper Motor</item>
+        <item>DAC Circuit</item>
+       
+    </string-array>
+    
+   <string-array name="list2">
+        <item>None</item>
+        <item>Led Circuit</item>
+       <item>Stepper Motor</item>
+        <item>DAC Circuit</item>
+       
+    </string-array>
+    
+    <string-array name="helplist">
+        <item>User Manual</item>
+        <item>About 8051</item>
+       <item>Experiments List</item>
+   
+       
+    </string-array>
+    
+  
+    
+
+</resources>
