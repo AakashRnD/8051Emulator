@@ -8,38 +8,38 @@
 	This application helps students to learn 	basics of 8051 microcontroller without buying actual 8051 development board.
 
 
-::::::::::::::::::::::::::::::::::::::::::::::::Installation Process::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::Installation Process:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 	---- Find the .apk file from attached folder Emulator8051 APK file.
 	---- Copy this .apk file into your Aakash Tablet.
 	---- Tap Emulator8051.apk file and follow the instructions to install.
 
 
-::::::::::::::::::::::::::::::::::::::::::::::::Developers Team::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+::::::::::::::::::::::::::::::::::::::::::::::::Developers Team::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 	---- Principal Investigator, Aakash Project
 
 		---- 	Prof. Deepak.B.Phatak
-			Subrao M. Nilekani Chair Professor,
+			Subrao M. Nilekani Chair Professor
 			Department of CSE,IIT Bombay
 
 	---- Project  In-charge
 
-		---- 	 Dr.Madhuri Sawant
-			 Senior Project Research Scientist,
-                                                       Department of CSE,IIT Bombay. 
+		---- 	Dr.Madhuri Sawant
+			Senior Project Research Scientist
+            Department of CSE,IIT Bombay. 
 
 	---- Project Mentor 
 
 		----	Mr. Pankaj Patil
- 			Research Associate, 
-                                                      Department of CSE,IIT Bombay.
+ 			Research Associate
+            Department of CSE,IIT Bombay.
 
 	---- Developers
 
-		---- Alekhya T.M.S.K.     (tmsk.alekhya@gmail.com)		-IIITDM Jabalpur
-		---- Anupam Sanghi	  (sanghi.anupam@gmail.com)		-JIIT Noida
-		---- Prayasee Pradhan     (prayasee91@gmail.com) 		-NIT Rourkela
-		---- Priyanka Padmanabhan (priyanka.91092@gmail.com)	        -VJTI Mumbai
- 		---- Sumanth Myrala	  (sumanthmyrala123@gmail.com)		-KIET Korangi
-		---- Sweksha Tripathi     (swe1807@gmail.com)		        -JIIT Noida
+		---- Alekhya T.M.S.K.		(tmsk.alekhya@gmail.com)		-IIITDM Jabalpur
+		---- Anupam sanghi			(sanghi.anupam@gmail.com)		-JIIT Noida
+		---- Prayasee Pradhan 		(prayasee91@gmail.com)			-NIT Rourkela
+		---- Priyanka Padmanabhan	(priyanka.91092@gmail.com)		-VJTI Mumbai
+ 		---- Sumanth Myrala			(sumanthmyrala123@gmail.com)	-KIET Korangi
+		---- Sweksha Tripathi		(swe1807@gmail.com)				-JIIT Noida
 	
