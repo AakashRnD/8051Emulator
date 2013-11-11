@@ -35,8 +35,8 @@
 
 		Alekhya T.M.S.K.		(tmsk.alekhya@gmail.com)		-IIITDM Jabalpur
 		Anupam sanghi			(sanghi.anupam@gmail.com)		-JIIT Noida
-		Prayasee Pradhan 		(prayasee91@gmail.com)			-NIT Rourkela
-		Priyanka Padmanabhan	(priyanka.91092@gmail.com)		-VJTI Mumbai
-		Sumanth Myrala			(sumanthmyrala123@gmail.com)	-KIET Korangi
+		Prayasee Pradhan		(prayasee91@gmail.com)			-NIT Rourkela
+		Priyanka Padmanabhan		(priyanka.91092@gmail.com)		-VJTI Mumbai
+		Sumanth Myrala			(sumanthmyrala123@gmail.com)		-KIET Korangi
 		Sweksha Tripathi		(swe1807@gmail.com)				-JIIT Noida
 	
